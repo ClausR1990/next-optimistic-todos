@@ -11,7 +11,16 @@ export default async function Home() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-between pb-24'>
       <div className='container max-w-2xl'>
-        <DataTable data={todos} columns={columns} />
+        <DataTable
+          data={todos}
+          columns={columns}
+          sortingState={[
+            {
+              id: 'updatedAt',
+              desc: true,
+            },
+          ]}
+        />
       </div>
     </main>
   );

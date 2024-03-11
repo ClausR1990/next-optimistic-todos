@@ -7,6 +7,8 @@ import {
   useReactTable,
   getPaginationRowModel,
   getFilteredRowModel,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 
 import {
@@ -19,22 +21,39 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import React from 'react';
+import { AddTodoForm } from '../forms/add-todo';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  sortingState?: SortingState;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  sortingState,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>(
+    sortingState ?? []
+  );
   const table = useReactTable({
     data,
     columns,
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
   return (
@@ -48,7 +67,7 @@ export function DataTable<TData, TValue>({
           }
           className='max-w-sm'
         />
-        <Button>Add new Todo</Button>
+        <AddTodoForm />
       </div>
       <div className='rounded-md border'>
         <Table>
